@@ -18,12 +18,12 @@ export const metadata: Metadata = {
 export default function AboutPage() {
   return (
     <>
-      <Intro alignment="start">
+      {/* <Intro alignment="start">
         <IntroTitle>{`${metadata.title}`}</IntroTitle>
         <IntroDescription>{metadata.description}</IntroDescription>
       </Intro>
 
-      <Featured />
+      <Featured /> */}
 
       <Prose>
         <h2>What is {config.site.name}?</h2>
