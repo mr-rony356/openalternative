@@ -14,66 +14,11 @@ import { prisma } from "~/services/prisma"
 export const generateContent = async (scrapedData: Omit<ScrapeResponse, "actions">) => {
   const model = createAnthropic()("claude-3-5-sonnet-20240620")
 
-  // const [categories, alternatives] = await Promise.all([
-  //   prisma.category.findMany(),
-  //   prisma.alternative.findMany(),
-  // ])
   const [categories, alternatives] = await Promise.all([
-    Promise.resolve([
-      { 
-        id: 'cat1', 
-        name: 'AI Tools', 
-        slug: 'ai-tools', 
-        label: 'AI',
-        createdAt: new Date(),
-        updatedAt: new Date()
-      },
-      { 
-        id: 'cat2', 
-        name: 'Web Development', 
-        slug: 'web-development', 
-        label: 'Web Dev',
-        createdAt: new Date(),
-        updatedAt: new Date()
-      },
-      { 
-        id: 'cat3', 
-        name: 'Productivity', 
-        slug: 'productivity', 
-        label: null,
-        createdAt: new Date(),
-        updatedAt: new Date()
-      }
-    ]),
-    Promise.resolve([
-      {
-        id: 'alt1',
-        name: 'Remix',
-        slug: 'remix',
-        description: 'A full stack web framework for React',
-        website: 'https://remix.run',
-        faviconUrl: null,
-        isFeatured: false,
-        discountCode: null,
-        discountAmount: null,
-        createdAt: new Date(),
-        updatedAt: new Date()
-      },
-      {
-        id: 'alt2',
-        name: 'Astro',
-        slug: 'astro',
-        description: 'Build faster websites with less client-side JavaScript',
-        website: 'https://astro.build',
-        faviconUrl: null,
-        isFeatured: false,
-        discountCode: null,
-        discountAmount: null,
-        createdAt: new Date(),
-        updatedAt: new Date()
-      }
-    ])
+    prisma.category.findMany(),
+    prisma.alternative.findMany(),
   ])
+
   try {
     const schema = z.object({
       tagline: z
