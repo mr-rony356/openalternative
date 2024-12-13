@@ -1,7 +1,23 @@
-import type { Prisma } from "@prisma/client"
-import { cache } from "~/lib/cache"
-import { adManyPayload, adOnePayload } from "~/server/web/ads/payloads"
-import { prisma } from "~/services/prisma"
+import type { Prisma } from "@prisma/client";
+import { cache } from "~/lib/cache";
+import { adManyPayload, adOnePayload } from "~/server/web/ads/payloads";
+import { prisma } from "~/services/prisma";
+
+const mockAdManyPayload = {
+  id: true,
+  name: true,
+  email: true,
+  description: true,
+  website: true,
+  type: true,
+  startsAt: true,
+  endsAt: true,
+};
+
+const mockAdOnePayload = {
+  ...mockAdManyPayload,
+  faviconUrl: true,
+};
 
 export const findAds = cache(
   async ({ where, orderBy, ...args }: Prisma.AdFindManyArgs) => {
@@ -9,20 +25,26 @@ export const findAds = cache(
       ...args,
       orderBy: orderBy ?? { startsAt: "desc" },
       select: adManyPayload,
-    })
+    });
   },
-  ["ads"],
-)
-
+  ["ads"]
+);
 export const findAd = cache(
   async ({ where, orderBy, ...args }: Prisma.AdFindFirstArgs) => {
-    return prisma.ad.findFirst({
-      ...args,
-      orderBy: orderBy ?? { startsAt: "desc" },
-      where: { startsAt: { lte: new Date() }, endsAt: { gt: new Date() }, ...where },
-      select: adOnePayload,
-    })
+    const mockAd = {
+      id: "ad1",
+      name: "Tech Innovators",
+      email: "contact@techinnovators.com",
+      description: "Cutting-edge tech solutions",
+      website: "https://techinnovators.com",
+      type: "Homepage",
+      startsAt: new Date("2024-01-01"),
+      endsAt: new Date("2024-12-31"),
+      faviconUrl: "https://techinnovators.com/favicon.ico",
+    };
+
+    return mockAd;
   },
   ["ad"],
-  { revalidate: 60 * 60 },
-)
+  { revalidate: 60 * 60 }
+);
